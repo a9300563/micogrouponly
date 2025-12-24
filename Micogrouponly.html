@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mico顧問團隊專屬 翊起幸福美麗成禎</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Microsoft JhengHei,sans-serif;background:#f5f5f5;padding:10px}
+
+    .calc{max-width:420px;margin:0 auto;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 15px 40px rgba(0,0,0,.15)}
+    .title{background:linear-gradient(90deg,#37474f,#607d8b);color:#fff;text-align:center;padding:20px 16px}
+    .title h1{font-size:18px;margin:0}
+    .title p{font-size:12px;margin-top:4px}
+    .content{padding:18px 14px}
+
+    .section{margin-bottom:18px}
+    .section-title{font-size:15px;font-weight:bold;color:#333;margin-bottom:8px;border-left:4px solid #37474f;padding-left:6px}
+
+    select,input{width:100%;padding:10px;border:2px solid #e1e8ed;border-radius:10px;font-size:14px;margin-bottom:8px;transition:all .2s}
+    select:focus,input:focus{outline:none;border-color:#37474f;box-shadow:0 0 0 3px rgba(55,71,79,.1)}
+
+    .tabs{display:flex;flex-wrap:wrap;margin-bottom:10px;border-radius:10px;overflow:hidden;border:1px solid #ddd}
+    .tab-btn{flex:1 1 33%;padding:6px 4px;font-size:12px;border:none;border-right:1px solid:#ddd;border-bottom:1px solid:#ddd;background:#f5f5f5;cursor:pointer}
+    .tab-btn:nth-child(3n){border-right:none}
+    .tab-btn.active{background:#37474f;color:#fff;font-weight:bold}
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+
+    .product-row{display:flex;align-items:center;padding:8px 8px;background:#f8f9fa;border-radius:10px;margin-bottom:6px;font-size:13px}
+    .product-info{flex:1}
+    .product-name{font-weight:bold;color:#333}
+    .product-pv{font-size:11px;color:#666;margin-top:2px}
+    .qty{width:55px;padding:6px;font-size:14px;border:2px solid:#ddd;border-radius:8px;text-align:center;margin-left:8px;background:#fff}
+
+    .summary{background:#e3f2fd;padding:10px;border-radius:12px;margin-bottom:10px;font-size:13px}
+    .summary-row{display:flex;justify-content:space-between;font-weight:bold;margin-bottom:4px}
+    .summary-value{color:#1976d2;font-size:15px}
+
+    .checkout-box{background:#fff3e0;border-radius:12px;border:2px solid:#ff9800;padding:12px;margin-top:8px;font-size:12px}
+    .checkout-title{text-align:center;font-size:15px;font-weight:bold;color:#e65100;margin-bottom:6px}
+    .final-pay{text-align:center;font-size:19px;font-weight:bold;color:#d32f2f;margin:8px 0}
+
+    .order-wrapper{max-width:1000px;margin:20px auto 8px auto;background:#fff;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.12);padding:14px}
+    .order-header{font-size:16px;font-weight:bold;border-bottom:3px solid:#003366;padding-bottom:6px;margin-bottom:8px}
+    .order-date{float:right;font-size:12px;color:#666}
+    table{width:100%;border-collapse:collapse;font-size:12px;text-align:center}
+    th,td{padding:5px 3px}
+    thead tr{background:#f5f5f5;border-bottom:2px solid:#ccc}
+    th{border-right:1px solid:#ddd}
+    tbody td{border-top:1px solid:#eee;border-right:1px solid:#eee}
+    tbody td:last-child{border-right:none}
+    .order-footer-row{background:#f1f1f7;font-weight:bold}
+
+    .order-bottom{display:flex;align-items:center;margin-top:10px;gap:8px}
+    .name-box{flex:1;display:flex;align-items:center;border:1px solid:#ccc;border-radius:4px;overflow:hidden}
+    .name-label{background:#f5f5f5;padding:6px 8px;border-right:1px solid:#ccc;font-size:12px}
+    .name-input{flex:1;border:none;padding:6px 8px;font-size:12px;outline:none}
+    .btn-copy{border:1px solid:#ccc;background:#fff;padding:6px 10px;border-radius:4px;cursor:pointer;font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="calc">
+    <div class="title">
+      <h1>Mico顧問團隊專屬 翊起幸福美麗成禎</h1>
+      <p></p>
+    </div>
+    <div class="content">
+      <!-- 階級 -->
+      <div class="section">
+        <div class="section-title">👑 目前階級</div>
+        <select id="rank">
+          <option value="0.00">會員 (0%)</option>
+          <option value="0.25" selected>專員 (25%)</option>
+          <option value="0.30">主任 (30%)</option>
+          <option value="0.35">經理 (35%)</option>
+          <option value="0.37">寶石階 (37%)</option>
+          <option value="0.38">鑽石階 (38%)</option>
+          <option value="0.39">金鑽階 (39%)</option>
+          <option value="0.40">顧問階 (40%)</option>
+        </select>
+      </div>
+
+      <!-- Tabs -->
+      <div class="section">
+        <div class="section-title">🧴 請選擇系列</div>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="tab-basic">全方位極致保養</button>
+          <button class="tab-btn" data-tab="tab-repair">高機能修護</button>
+          <button class="tab-btn" data-tab="tab-sun">UV 防曬</button>
+          <button class="tab-btn" data-tab="tab-acne">有感抗痘</button>
+          <button class="tab-btn" data-tab="tab-essence">精萃保養</button>
+          <button class="tab-btn" data-tab="tab-body">美體護理</button>
+          <button class="tab-btn" data-tab="tab-health">保健營養</button>
+        </div>
+
+        <!-- 全方位極致保養系列：全部品項 -->
+        <div id="tab-basic" class="tab-content active">
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">淨妝精華凝膠</div>
+              <div class="product-pv">150ml · 1,995 / 1,300PV · C0</div>
+            </div>
+            <input type="number" class="qty" id="qty-C0" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">1A 雙重潔顏露</div>
+              <div class="product-pv">120ml · 1,995 / 1,700PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-1A" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">2A 均衡潤膚露</div>
+              <div class="product-pv">120ml · 1,995 / 1,700PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-2A" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">3 多效晶潤眼霜</div>
+              <div class="product-pv">30ml · 3,990 / 3,500PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-3" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">4 嫩白菁華霜</div>
+              <div class="product-pv">50ml · 4,200 / 3,600PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-4" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">5A 亮顏調理霜</div>
+              <div class="product-pv">50ml · 4,200 / 3,600PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-5A" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">5B 亮顏調理霜</div>
+              <div class="product-pv">50ml · 4,200 / 3,600PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-5B" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">7 晶煥活膚霜</div>
+              <div class="product-pv">30ml · 2,500 / 1,800PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-7" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">8 賦活精華霜</div>
+              <div class="product-pv">50ml · 3,990 / 3,500PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-8" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">9A 柔潤保濕霜</div>
+              <div class="product-pv">50ml · 2,990 / 2,100PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-9A" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">9B 柔潤保濕霜‑B</div>
+              <div class="product-pv">50ml · 2,990 / 2,100PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-9B" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">Q10 美膚煥采霜</div>
+              <div class="product-pv">30ml · 3,190 / 2,400PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-Q10" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">4 嫩白菁華霜 (s)</div>
+              <div class="product-pv">30ml · 2,650 / 2,100PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-4s" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">5A 亮顏調理霜 (s)</div>
+              <div class="product-pv">30ml · 2,650 / 2,100PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-5As" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">8 賦活精華霜 (s)</div>
+              <div class="product-pv">30ml · 2,450 / 1,900PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-8s" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">9A 柔潤保濕霜 (s)</div>
+              <div class="product-pv">30ml · 2,090 / 1,100PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-9As" min="0" value="0">
+          </div>
+        </div>
+
+        <!-- 高機能修護系列 -->
+        <div id="tab-repair" class="tab-content">
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">維他命C美白粉(100g)</div>
+              <div class="product-pv">100g · 32,900 / 27,000PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-VC100" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">維他命C美白粉(10g)</div>
+              <div class="product-pv">10g · 3,990 / 3,500PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-VC10" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">瞬效鎖水修護精華(紫)</div>
+              <div class="product-pv">30ml · 3,090 / 2,200PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-P1" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">瞬效雙萃修護精華(桃)</div>
+              <div class="product-pv">30ml · 3,090 / 2,200PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-P2" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">超水潤緊緻保濕安瓶 NEW</div>
+              <div class="product-pv">30ml · 2,890 / 2,000PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-AMP" min="0" value="0">
+          </div>
+        </div>
+
+        <!-- UV 防曬系列 -->
+        <div id="tab-sun" class="tab-content">
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">6A 高效鎖水防曬霜</div>
+              <div class="product-pv">50ml · 3,990 / 3,500PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-6A" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">6As 高效鎖水防曬霜 (s)</div>
+              <div class="product-pv">30ml · 2,450 / 1,900PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-6As" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">6B 水凝潤白防曬霜</div>
+              <div class="product-pv">50ml · 3,990 / 3,500PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-6B" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">6C 完美輕透防曬霜</div>
+              <div class="product-pv">30ml · 1,990 / 1,500PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-6C" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">6D 極致光感防曬霜</div>
+              <div class="product-pv">30ml · 2,890 / 2,000PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-6D" min="0" value="0">
+          </div>
+        </div>
+
+        <!-- 有感抗痘系列 -->
+        <div id="tab-acne" class="tab-content">
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">1B 抗痘潔顏凝露 NEW</div>
+              <div class="product-pv">120ml · 1,990 / 1,500PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-1B" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">2B 抗痘調理晶露 NEW</div>
+              <div class="product-pv">120ml · 1,990 / 1,500PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-2B" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">超進化抗痘活性安瓶 NEW</div>
+              <div class="product-pv">30ml · 2,890 / 2,000PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-AC" min="0" value="0">
+          </div>
+        </div>
+
+        <!-- 精萃保養系列 -->
+        <div id="tab-essence" class="tab-content">
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">保濕修護生物纖維面膜</div>
+              <div class="product-pv">5pcs/盒 · 2,940 / 2,400PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-M1" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">珍珠亮白生物纖維面膜</div>
+              <div class="product-pv">5pcs/盒 · 2,940 / 2,400PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-M2" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">生麗吸油面紙</div>
+              <div class="product-pv">10盒/組 · 450 / 300PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-O1" min="0" value="0">
+          </div>
+        </div>
+
+        <!-- 美體護理系列 -->
+        <div id="tab-body" class="tab-content">
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">保濕修護身體乳</div>
+              <div class="product-pv">200ml · 1,990 / 1,400PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-B1" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">嫩白淨痘身體乳 NEW</div>
+              <div class="product-pv">200ml · 1,990 / 1,400PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-B2" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">極效水潤玉手霜 NEW</div>
+              <div class="product-pv">30ml · 450 / 300PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-B3" min="0" value="0">
+          </div>
+        </div>
+
+        <!-- 保健營養食品 -->
+        <div id="tab-health" class="tab-content">
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">優適麗膠囊食品</div>
+              <div class="product-pv">60顆/瓶 · 2,280 / 1,300PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-N1" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">松芯麗膠囊食品</div>
+              <div class="product-pv">60顆/瓶 · 3,580 / 2,400PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-N2" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">美顏麗膠囊食品</div>
+              <div class="product-pv">60顆/瓶 · 2,980 / 1,600PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-N3" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">熊護麗膠囊食品</div>
+              <div class="product-pv">60顆/瓶 · 2,980 / 1,600PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-N4" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">敏捷麗膠囊食品</div>
+              <div class="product-pv">60顆/瓶 · 2,380 / 1,400PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-N5" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">芷糖麗膠囊食品 NEW</div>
+              <div class="product-pv">60顆/瓶 · 3,280 / 1,900PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-N6" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">舒麩麗高纖燕麥麩 NEW</div>
+              <div class="product-pv">30包/盒 · 1,880 / 1,100PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-N7" min="0" value="0">
+          </div>
+          <div class="product-row">
+            <div class="product-info">
+              <div class="product-name">免益麗機能益生菌 NEW</div>
+              <div class="product-pv">30包/盒 · 2,280 / 1,300PV</div>
+            </div>
+            <input type="number" class="qty" id="qty-N8" min="0" value="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- 總結 -->
+      <div class="summary">
+        <div class="summary-row">
+          <span>總金額</span>
+          <span class="summary-value" id="totalAmount">NT$0</span>
+        </div>
+        <div class="summary-row">
+          <span>總 PV 值</span>
+          <span class="summary-value" id="totalPV">0 PV</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 訂單明細 -->
+  <div class="order-wrapper">
+    <div class="order-header">
+      訂單明細
+      <span class="order-date" id="orderDate"></span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>產品名稱</th>
+            <th>售價</th>
+            <th>PV值</th>
+            <th>代號</th>
+            <th>數量</th>
+            <th>金額</th>
+            <th>PV值</th>
+          </tr>
+        </thead>
+        <tbody id="orderBody"></tbody>
+        <tfoot>
+          <tr class="order-footer-row">
+            <td style="text-align:left;padding-left:8px;">總計</td>
+            <td></td><td></td><td></td>
+            <td id="sumQty">0</td>
+            <td id="sumAmount">0</td>
+            <td id="sumPV">0</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="order-bottom">
+      <div class="name-box">
+        <span class="name-label">姓名：</span>
+        <input id="customerName" class="name-input" type="text" placeholder="輸入姓名">
+      </div>
+      <button class="btn-copy" onclick="copyOrder()">📋 複製</button>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { code: 'C0',  name: '淨妝精華凝膠',        unit: '150ml/瓶', price: 1995, pv: 1300 },
+      { code: '1A',  name: '雙重潔顏露',          unit: '120ml/瓶', price: 1995, pv: 1700 },
+      { code: '2A',  name: '均衡潤膚露',          unit: '120ml/瓶', price: 1995, pv: 1700 },
+      { code: '3',   name: '多效晶潤眼霜',        unit: '30ml/瓶',  price: 3990, pv: 3500 },
+      { code: '4',   name: '嫩白菁華霜',          unit: '50ml/瓶',  price: 4200, pv: 3600 },
+      { code: '5A',  name: '亮顏調理霜',          unit: '50ml/瓶',  price: 4200, pv: 3600 },
+      { code: '5B',  name: '亮顏調理霜',          unit: '50ml/瓶',  price: 4200, pv: 3600 },
+      { code: '7',   name: '晶煥活膚霜',          unit: '30ml/瓶',  price: 2500, pv: 1800 },
+      { code: '8',   name: '賦活精華霜',          unit: '50ml/瓶',  price: 3990, pv: 3500 },
+      { code: '9A',  name: '柔潤保濕霜',          unit: '50ml/瓶',  price: 2990, pv: 2100 },
+      { code: '9B',  name: '柔潤保濕霜‑B',        unit: '50ml/瓶',  price: 2990, pv: 2100 },
+      { code: 'Q10', name: '美膚煥采霜',          unit: '30ml/瓶',  price: 3190, pv: 2400 },
+      { code: '4s',  name: '嫩白菁華霜 (s)',      unit: '30ml/瓶',  price: 2650, pv: 2100 },
+      { code: '5As', name: '亮顏調理霜 (s)',      unit: '30ml/瓶',  price: 2650, pv: 2100 },
+      { code: '8s',  name: '賦活精華霜 (s)',      unit: '30ml/瓶',  price: 2450, pv: 1900 },
+      { code: '9As', name: '柔潤保濕霜 (s)',      unit: '30ml/瓶',  price: 2090, pv: 1100 },
+
+      { code: 'VC100',  name: '維他命C美白粉(100g) 加贈10g 1瓶', unit: '100g/瓶', price: 32900, pv: 27000 },
+      { code: 'VC10',   name: '維他命C美白粉(10g)',              unit: '10g/瓶',  price: 3990,  pv: 3500 },
+      { code: 'P1',     name: '瞬效鎖水修護精華(紫)',            unit: '30ml/瓶', price: 3090,  pv: 2200 },
+      { code: 'P2',     name: '瞬效雙萃修護精華(桃)',            unit: '30ml/瓶', price: 3090,  pv: 2200 },
+      { code: 'AMP',    name: '超水潤緊緻保濕安瓶 NEW',          unit: '30ml/瓶', price: 2890,  pv: 2000 },
+
+      { code: '6A',  name: '高效鎖水防曬霜',          unit: '50ml/瓶', price: 3990, pv: 3500 },
+      { code: '6As', name: '高效鎖水防曬霜 (s)',      unit: '30ml/瓶', price: 2450, pv: 1900 },
+      { code: '6B',  name: '水凝潤白防曬霜',          unit: '50ml/瓶', price: 3990, pv: 3500 },
+      { code: '6C',  name: '完美輕透防曬霜',          unit: '30ml/瓶', price: 1990, pv: 1500 },
+      { code: '6D',  name: '極致光感防曬霜',          unit: '30ml/瓶', price: 2890, pv: 2000 },
+
+      { code: '1B', name: '抗痘潔顏凝露 NEW',          unit: '120ml/瓶', price: 1990, pv: 1500 },
+      { code: '2B', name: '抗痘調理晶露 NEW',          unit: '120ml/瓶', price: 1990, pv: 1500 },
+      { code: 'AC', name: '超進化抗痘活性安瓶 NEW',    unit: '30ml/瓶',  price: 2890, pv: 2000 },
+
+      { code: 'M1', name: '保濕修護生物纖維面膜',      unit: '5pcs/盒',  price: 2940, pv: 2400 },
+      { code: 'M2', name: '珍珠亮白生物纖維面膜',      unit: '5pcs/盒',  price: 2940, pv: 2400 },
+      { code: 'O1', name: '生麗吸油面紙',              unit: '10盒/組',  price: 450,  pv: 300 },
+
+      { code: 'B1', name: '保濕修護身體乳',            unit: '200ml/瓶', price: 1990, pv: 1400 },
+      { code: 'B2', name: '嫩白淨痘身體乳 NEW',        unit: '200ml/瓶', price: 1990, pv: 1400 },
+      { code: 'B3', name: '極效水潤玉手霜 NEW',        unit: '30ml/瓶',  price: 450,  pv: 300 },
+
+      { code: 'N1', name: '優適麗膠囊食品',            unit: '60顆/瓶',  price: 2280, pv: 1300 },
+      { code: 'N2', name: '松芯麗膠囊食品',            unit: '60顆/瓶',  price: 3580, pv: 2400 },
+      { code: 'N3', name: '美顏麗膠囊食品',            unit: '60顆/瓶',  price: 2980, pv: 1600 },
+      { code: 'N4', name: '熊護麗膠囊食品',            unit: '60顆/瓶',  price: 2980, pv: 1600 },
+      { code: 'N5', name: '敏捷麗膠囊食品',            unit: '60顆/瓶',  price: 2380, pv: 1400 },
+      { code: 'N6', name: '芷糖麗膠囊食品 NEW',        unit: '60顆/瓶',  price: 3280, pv: 1900 },
+      { code: 'N7', name: '舒麩麗高纖燕麥麩 NEW',      unit: '30包/盒',  price: 1880, pv: 1100 },
+      { code: 'N8', name: '免益麗機能益生菌 NEW',      unit: '30包/盒',  price: 2280, pv: 1300 },
+
+      { code: 'JOIN',  name: '入會費',                 unit: '',         price: 1000, pv: 0 },
+      { code: 'RENEW', name: '續約費',                 unit: '',         price: 500,  pv: 0 }
+    ];
+
+    const codeToInput = {
+      'C0':'qty-C0','1A':'qty-1A','2A':'qty-2A','3':'qty-3','4':'qty-4',
+      '5A':'qty-5A','5B':'qty-5B','7':'qty-7','8':'qty-8','9A':'qty-9A',
+      '9B':'qty-9B','Q10':'qty-Q10','4s':'qty-4s','5As':'qty-5As',
+      '8s':'qty-8s','9As':'qty-9As',
+      'VC100':'qty-VC100','VC10':'qty-VC10','P1':'qty-P1','P2':'qty-P2','AMP':'qty-AMP',
+      '6A':'qty-6A','6As':'qty-6As','6B':'qty-6B','6C':'qty-6C','6D':'qty-6D',
+      '1B':'qty-1B','2B':'qty-2B','AC':'qty-AC',
+      'M1':'qty-M1','M2':'qty-M2','O1':'qty-O1',
+      'B1':'qty-B1','B2':'qty-B2','B3':'qty-B3',
+      'N1':'qty-N1','N2':'qty-N2','N3':'qty-N3','N4':'qty-N4',
+      'N5':'qty-N5','N6':'qty-N6','N7':'qty-N7','N8':'qty-N8'
+    };
+
+    function calculate(){
+      let amt=0, pv=0, qtySum=0;
+      Object.keys(codeToInput).forEach(code=>{
+        const p = products.find(x=>x.code===code);
+        if(!p) return;
+        const el = document.getElementById(codeToInput[code]);
+        if(!el) return;
+        const q = parseInt(el.value) || 0;
+        amt += q * p.price;
+        pv  += q * p.pv;
+        qtySum += q;
+      });
+
+      document.getElementById('totalAmount').textContent = 'NT$' + amt.toLocaleString();
+      document.getElementById('totalPV').textContent     = pv.toLocaleString() + ' PV';
+      document.getElementById('sumQty').textContent      = qtySum;
+      document.getElementById('sumAmount').textContent   = amt.toLocaleString();
+      document.getElementById('sumPV').textContent       = pv.toLocaleString();
+
+      renderOrderTable();
+    }
+
+    function renderOrderTable(){
+      const tbody=document.getElementById('orderBody');
+      tbody.innerHTML='';
+      Object.keys(codeToInput).forEach(code=>{
+        const p = products.find(x=>x.code===code);
+        if(!p) return;
+        const el = document.getElementById(codeToInput[code]);
+        if(!el) return;
+        const q = parseInt(el.value) || 0;
+        const lineAmt = q * p.price;
+        const linePV  = q * p.pv;
+        const tr=document.createElement('tr');
+        tr.innerHTML=`
+          <td style="text-align:left;">${p.name}</td>
+          <td>${p.price.toLocaleString()}</td>
+          <td>${p.pv.toLocaleString()}</td>
+          <td>${p.code}</td>
+          <td style="background:${q>0?'#c8f7c5':'transparent'};">${q}</td>
+          <td style="background:${lineAmt>0?'#fff9c4':'transparent'};">${lineAmt>0?lineAmt.toLocaleString():'0'}</td>
+          <td>${linePV>0?linePV.toLocaleString():'0'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function copyOrder(){
+      const name = document.getElementById('customerName').value || '（未填姓名）';
+      calculate();
+
+      const sumQty    = document.getElementById('sumQty').textContent || '0';
+      const sumAmount = document.getElementById('sumAmount').textContent || '0';
+      const sumPV     = document.getElementById('sumPV').textContent || '0';
+
+      let text = `【訂單明細】\n姓名：${name}\n\n`;
+      text += `品名 / 售價 / PV / 數量 / 金額 / PV\n`;
+
+      Object.keys(codeToInput).forEach(code=>{
+        const p = products.find(x=>x.code===code);
+        if(!p) return;
+        const el = document.getElementById(codeToInput[code]);
+        if(!el) return;
+        const q = parseInt(el.value) || 0;
+        if(q>0){
+          const lineAmt = q * p.price;
+          const linePV  = q * p.pv;
+          text += `${p.name} / ${p.price} / ${p.pv} / ${q} / ${lineAmt} / ${linePV}\n`;
+        }
+      });
+
+      text += `\n【總計】 數量：${sumQty} / 金額：${sumAmount} / PV：${sumPV}\n`;
+
+      navigator.clipboard.writeText(text).then(()=>{
+        alert('訂單 + 總計 已複製，可貼到 Line / 記事本。');
+      });
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.getElementById('rank').addEventListener('change',calculate);
+    document.querySelectorAll('.qty').forEach(input=>{
+      input.addEventListener('input',calculate);
+    });
+
+    document.getElementById('orderDate').textContent = new Date().toISOString().slice(0,10);
+    calculate();
+  </script>
+</body>
+</html>
